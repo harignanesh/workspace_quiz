@@ -13,6 +13,7 @@ const AdminInsertQuestion = () => {
   const [showModal, setShowModal] = useState(false);
   const [allQuestions, setAllQuestions] = useState([]);
   const [theme, setTheme] = useState(() => localStorage.getItem('theme') || 'light');
+  const [uploadProgress, setUploadProgress] = useState();
 
   useEffect(() => {
     document.body.setAttribute('data-theme', theme);
@@ -62,18 +63,20 @@ const AdminInsertQuestion = () => {
   const handleFileUpload = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
+    setUploadProgress(0);
     try {
       const text = await file.text();
       const data = JSON.parse(text);
       if (Array.isArray(data)) {
         let successCount = 0;
-        for (const item of data) {
+        for (let i = 0; i < data.length; i++) {
           try {
-            await insertQuestion(item);
+            await insertQuestion(data[i]);
             successCount++;
           } catch (err) {
             console.error('Failed to insert question:', err);
           }
+          setUploadProgress(Math.round(((i + 1) / data.length) * 100));
         }
         setMessage(`success:Successfully inserted ${successCount} out of ${data.length} questions!`);
       } else {
@@ -82,6 +85,7 @@ const AdminInsertQuestion = () => {
     } catch (err) {
       setMessage('error:Failed to process the file.');
     }
+    setTimeout(() => setUploadProgress(undefined), 1200);
   };
 
   return (
@@ -112,16 +116,19 @@ const AdminInsertQuestion = () => {
           />
         </div>
         <label>Options:</label>
-        <div className="options-grid">
+        <div className="options-list-modern">
           {options.map((opt, idx) => (
-            <input
-              key={idx}
-              type="text"
-              placeholder={`Option ${idx + 1}`}
-              value={opt}
-              onChange={(e) => handleOptionChange(idx, e.target.value)}
-              required
-            />
+            <div className="option-row-modern" key={idx}>
+              <span className="option-index-modern">{idx + 1}.</span>
+              <input
+                type="text"
+                className="option-input-modern"
+                placeholder={`Option ${idx + 1}`}
+                value={opt}
+                onChange={(e) => handleOptionChange(idx, e.target.value)}
+                required
+              />
+            </div>
           ))}
         </div>
         <div>
@@ -161,11 +168,26 @@ const AdminInsertQuestion = () => {
       <div className="file-upload-section modern-upload-section">
         <label>Bulk Upload Questions</label>
         <p>Upload a JSON file containing an array of questions</p>
-        <input
-          type="file"
-          accept="application/json"
-          onChange={handleFileUpload}
-        />
+        <div className="file-upload-modern">
+          <div className="file-drop-area-modern" onClick={() => document.getElementById('file-upload-input').click()}>
+            <span className="upload-icon-modern">⬆️</span>
+            <span>Drag and drop here <span className="browse-link-modern">or browse</span></span>
+            <input
+              id="file-upload-input"
+              type="file"
+              accept="application/json"
+              style={{ display: 'none' }}
+              onChange={handleFileUpload}
+            />
+          </div>
+          {/* Progress bar UI, dynamic rendering */}
+          {uploadProgress !== undefined && (
+            <div className="progress-bar-modern">
+              <div className="progress-bar-fill-modern" style={{ width: `${uploadProgress}%` }}></div>
+              <span className="progress-bar-text-modern">{uploadProgress}%</span>
+            </div>
+          )}
+        </div>
       </div>
       {showModal && (
         <div className="modal-overlay" onClick={() => setShowModal(false)}>

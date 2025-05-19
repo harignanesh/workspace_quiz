@@ -298,11 +298,17 @@ body[data-theme="dark"] {
   gap: 18px;
 }
 .question-item {
-  background: #f3e8ff;
+  background: #f5f6fa;
   border-radius: 10px;
   padding: 14px 16px;
   box-shadow: 0 1px 6px 0 rgba(162,28,175,0.07);
-  border: 1.5px solid #a21caf;
+  border: 1.5px solid #2563eb;
+  color: #222;
+}
+[data-theme="dark"] .question-item {
+  background: #23263a;
+  color: #f7f7fb;
+  border: 1.5px solid #60a5fa;
 }
 .question-item h4 {
   margin: 0 0 4px 0;
@@ -367,6 +373,106 @@ body[data-theme="dark"] {
 
 .options-grid {
   margin-bottom: 10px !important;
+}
+
+.options-list-modern {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-bottom: 12px;
+}
+.option-row-modern {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #f5f6fa;
+  border-radius: 8px;
+  padding: 0.5rem 0.8rem;
+  box-shadow: 0 1px 4px 0 rgba(80,80,160,0.04);
+  transition: box-shadow 0.2s;
+}
+.option-row-modern:focus-within {
+  box-shadow: 0 2px 8px 0 rgba(99,102,241,0.10);
+}
+.option-index-modern {
+  font-weight: 600;
+  color: #6366f1;
+  font-size: 1.1rem;
+  min-width: 1.5em;
+  text-align: right;
+}
+.option-input-modern {
+  flex: 1;
+  padding: 0.7rem 1rem;
+  border: 1.5px solid #a21caf;
+  border-radius: 6px;
+  font-size: 1rem;
+  background: #f8fafc;
+  color: #2d2d2d;
+  transition: border 0.2s;
+}
+.option-input-modern:focus {
+  border: 1.5px solid #6366f1;
+  outline: none;
+}
+
+.file-upload-modern {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.file-drop-area-modern {
+  border: 2px dashed #6366f1;
+  background: #f5f6fa;
+  border-radius: 12px;
+  padding: 28px 0;
+  text-align: center;
+  color: #6366f1;
+  font-size: 1.1rem;
+  cursor: pointer;
+  margin-bottom: 8px;
+  transition: border 0.2s, background 0.2s;
+}
+.file-drop-area-modern:hover {
+  border-color: #a21caf;
+  background: #ede9fe;
+}
+.upload-icon-modern {
+  font-size: 2.2rem;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+.browse-link-modern {
+  color: #a21caf;
+  text-decoration: underline;
+  cursor: pointer;
+  margin-left: 0.2em;
+}
+.progress-bar-modern {
+  width: 100%;
+  background: #e0e7ff;
+  border-radius: 8px;
+  height: 18px;
+  margin-top: 6px;
+  position: relative;
+  overflow: hidden;
+}
+.progress-bar-fill-modern {
+  background: linear-gradient(90deg, #6366f1 0%, #a21caf 100%);
+  height: 100%;
+  border-radius: 8px 0 0 8px;
+  transition: width 0.3s;
+}
+.progress-bar-text-modern {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  color: #3730a3;
+  font-size: 0.95rem;
+  font-weight: 600;
+  line-height: 18px;
 }
 
 @media (max-width: 700px) {
