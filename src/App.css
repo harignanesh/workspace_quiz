@@ -36,3 +36,35 @@
     transform: rotate(360deg);
   }
 }
+
+/* Add some basic styles for login and quiz pages */
+.login-container, .quiz-container {
+  max-width: 400px;
+  margin: 40px auto;
+  padding: 2rem;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  text-align: center;
+}
+.login-container input, .login-container button {
+  display: block;
+  width: 100%;
+  margin: 1rem 0;
+  padding: 0.75rem;
+  font-size: 1rem;
+}
+.quiz-container .options {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+.quiz-container button.selected {
+  background: #1976d2;
+  color: #fff;
+}
+.error {
+  color: red;
+  margin-top: 1rem;
+}

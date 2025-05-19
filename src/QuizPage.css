@@ -1,0 +1,222 @@
+.quiz-container {
+  max-width: 600px;
+  margin: 2rem auto;
+  padding: 2rem 1.5rem;
+  background: linear-gradient(135deg, #f7f7fb 0%, #e3e6ff 100%);
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(80, 80, 160, 0.08);
+  min-height: 500px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.quiz-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.category-selector label {
+  font-weight: 600;
+  margin-right: 0.5rem;
+  color: #6c47ff;
+}
+
+.category-selector select {
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  border: 1.5px solid #6c47ff;
+  font-size: 1rem;
+  background: #fff;
+  color: #2c3e50;
+  font-weight: 500;
+}
+
+.timer {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #ff3b30;
+  background: #fff0f0;
+  padding: 0.5rem 1.2rem;
+  border-radius: 8px;
+}
+
+.question-section {
+  background: #fff;
+  border-radius: 12px;
+  padding: 1.2rem 1rem 1rem 1rem;
+  box-shadow: 0 2px 8px rgba(80, 80, 160, 0.06);
+  margin-bottom: 0.5rem;
+}
+
+.question-count {
+  font-size: 1rem;
+  color: #888;
+  margin-bottom: 0.5rem;
+}
+
+.question-text {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+.options-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  max-height: 260px;
+  overflow-y: auto;
+  margin-bottom: 1rem;
+}
+
+.option-button {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  background: #fff;
+  border: 2px solid #e0e6ed;
+  border-radius: 12px;
+  padding: 1rem 1.2rem;
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: #2c3e50;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 2px 8px rgba(80, 80, 160, 0.04);
+  text-align: left;
+}
+
+.option-button.selected {
+  border-color: #6c47ff;
+  background: #f3f0ff;
+}
+
+.option-button.correct {
+  border-color: #4cd964;
+  background: #e3ffe3;
+  color: #28a745;
+}
+
+.option-button.wrong {
+  border-color: #ff3b30;
+  background: #fff0f0;
+  color: #ff3b30;
+}
+
+.option-button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.option-label {
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: #6c47ff;
+  min-width: 28px;
+  display: inline-block;
+}
+
+.option-text {
+  flex: 1;
+}
+
+.next-button {
+  background: linear-gradient(45deg, #6c47ff, #8253ff);
+  color: white;
+  padding: 0.9rem 2.2rem;
+  border: none;
+  border-radius: 10px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin: 0 auto;
+  display: block;
+  margin-top: 1rem;
+  transition: background 0.2s, transform 0.2s;
+}
+
+.next-button:hover {
+  background: linear-gradient(45deg, #8253ff, #6c47ff);
+  transform: translateY(-2px);
+}
+
+.result-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 2.5rem 1.5rem;
+  box-shadow: 0 4px 24px rgba(80, 80, 160, 0.10);
+  text-align: center;
+}
+
+.score-display {
+  margin: 1.5rem 0;
+}
+
+.score-circle {
+  display: inline-flex;
+  align-items: baseline;
+  justify-content: center;
+  background: linear-gradient(135deg, #6c47ff 0%, #8253ff 100%);
+  color: #fff;
+  border-radius: 50%;
+  width: 90px;
+  height: 90px;
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  box-shadow: 0 2px 12px rgba(108, 71, 255, 0.12);
+}
+
+.score-number {
+  font-size: 2.5rem;
+  margin-right: 0.2em;
+}
+
+.total-questions {
+  font-size: 1.2rem;
+  opacity: 0.8;
+}
+
+.score-text {
+  font-size: 1.2rem;
+  color: #6c47ff;
+  margin-bottom: 1.5rem;
+}
+
+.restart-btn {
+  background: linear-gradient(45deg, #6c47ff, #8253ff);
+  color: white;
+  padding: 0.8rem 2rem;
+  border: none;
+  border-radius: 10px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 1rem;
+  transition: background 0.2s, transform 0.2s;
+}
+
+.restart-btn:hover {
+  background: linear-gradient(45deg, #8253ff, #6c47ff);
+  transform: translateY(-2px);
+}
+
+.loading-spinner {
+  text-align: center;
+  color: #6c47ff;
+  font-size: 1.2rem;
+  margin-top: 2rem;
+}
+
+@media (max-width: 700px) {
+  .quiz-container {
+    padding: 1rem 0.5rem;
+    min-height: 400px;
+  }
+  .result-card {
+    padding: 1.5rem 0.5rem;
+  }
+}
