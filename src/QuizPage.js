@@ -8,8 +8,7 @@ const QuizPage = () => {
   const [loading, setLoading] = useState(true);
   const [current, setCurrent] = useState(0);
   const [selected, setSelected] = useState(null);
-  const [score, setScore] = useState(0);
-  const [showResult, setShowResult] = useState(false);
+  const [showThankYou, setShowThankYou] = useState(false);
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState('');
   const [timeLeft, setTimeLeft] = useState(60 * 60); // 60 minutes in seconds
@@ -44,8 +43,7 @@ const QuizPage = () => {
         setQuestions(questionList);
         setCurrent(0);
         setSelected(null);
-        setScore(0);
-        setShowResult(false);
+        setShowThankYou(false);
         setTimeLeft(60 * 60);
       } catch (err) {
         console.error('Error fetching questions:', err);
@@ -58,11 +56,11 @@ const QuizPage = () => {
 
   useEffect(() => {
     // Timer countdown
-    if (timeLeft > 0 && !showResult) {
+    if (timeLeft > 0 && !showThankYou) {
       const timer = setInterval(() => {
         setTimeLeft(prev => {
           if (prev <= 1) {
-            setShowResult(true);
+            setShowThankYou(true);
             clearInterval(timer);
             return 0;
           }
@@ -71,7 +69,7 @@ const QuizPage = () => {
       }, 1000);
       return () => clearInterval(timer);
     }
-  }, [timeLeft, showResult]);
+  }, [timeLeft, showThankYou]);
 
   const formatTime = (seconds) => {
     const mins = Math.floor(seconds / 60);
@@ -85,15 +83,16 @@ const QuizPage = () => {
   };
 
   const handleNext = () => {
-    if (selected === questions[current].answer) {
-      setScore(score + 1);
-    }
     if (current < questions.length - 1) {
       setCurrent(current + 1);
       setSelected(null);
     } else {
-      setShowResult(true);
+      setShowThankYou(true);
     }
+  };
+
+  const handleEndQuiz = () => {
+    setShowThankYou(true);
   };
 
   if (loading) {
@@ -104,28 +103,18 @@ const QuizPage = () => {
     );
   }
 
-  if (showResult) {
+  if (showThankYou) {
     return (
-      <div className="quiz-container">
-        <div className="result-card">
-          <h2>Quiz Complete!</h2>
-          <div className="score-display">
-            <div className="score-circle">
-              <span className="score-number">{score}</span>
-              <span className="total-questions">/{questions.length}</span>
-            </div>
-          </div>
-          <p className="score-text">You scored {Math.round((score/questions.length) * 100)}%</p>
-          <button onClick={() => window.location.reload()} className="restart-btn">
-            Try Again
-          </button>
-        </div>
+      <div className="quiz-container thankyou-page">
+        <h2>Thank You!</h2>
+        <p>Your quiz is completed.</p>
+        <button className="restart-btn" onClick={() => window.location.reload()}>Take Another Quiz</button>
       </div>
     );
   }
 
   return (
-    <div className="quiz-container">
+    <div className="quiz-container modern-quiz">
       <div className="quiz-header">
         <div className="category-selector">
           <label>Select Category:</label>
@@ -145,37 +134,38 @@ const QuizPage = () => {
         <div className="question-count">
           Question {current + 1} of {questions.length}
         </div>
-        <div className="question-text">{questions[current].question}</div>
+        <div className="question-text modern-question-font">{questions[current].question}</div>
       </div>
 
-      <div className="options-container">
-        {questions[current].options.map((option, idx) => (
-          <button
-            key={idx}
-            className={`option-button ${
-              selected === idx ? 'selected' : ''
-            } ${
-              selected !== null && idx === questions[current].answer ? 'correct' : ''
-            } ${
-              selected !== null && selected === idx && selected !== questions[current].answer ? 'wrong' : ''
-            }`}
-            onClick={() => handleOptionClick(idx)}
-            disabled={selected !== null}
+      <div className="options-container modern-options-scroll">
+        {Array.isArray(questions[current]?.options) ? (
+          questions[current].options.map((option, idx) => (
+            <button
+              key={idx}
+              className={`option-button modern-option-btn ${selected === idx ? 'selected' : ''}`}
+              onClick={() => handleOptionClick(idx)}
+              disabled={selected !== null}
+            >
+              <span className="option-label">{String.fromCharCode(65 + idx)}</span>
+              <span className="option-text">{option}</span>
+            </button>
+          ))
+        ) : (
+          <div className="loading-spinner">No options available for this question.</div>
+        )}
+      </div>
+
+      <div className="quiz-actions">
+        <button className="endquiz-btn" onClick={handleEndQuiz}>End Quiz</button>
+        {selected !== null && (
+          <button 
+            className="next-button"
+            onClick={handleNext}
           >
-            <span className="option-label">{String.fromCharCode(65 + idx)}</span>
-            <span className="option-text">{option}</span>
+            {current === questions.length - 1 ? 'Finish Quiz' : 'Next Question'}
           </button>
-        ))}
+        )}
       </div>
-
-      {selected !== null && (
-        <button 
-          className="next-button"
-          onClick={handleNext}
-        >
-          {current === questions.length - 1 ? 'Finish Quiz' : 'Next Question'}
-        </button>
-      )}
     </div>
   );
 };

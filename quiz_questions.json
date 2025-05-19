@@ -1,0 +1,206 @@
+{
+  "Maths": [
+    {
+      "question": "What is the value of  (pi) up to two decimal places?",
+      "options": [
+        "3.12",
+        "3.14",
+        "3.16",
+        "3.18"
+      ],
+      "answer": 1
+    },
+    {
+      "question": "What is the square root of 144?",
+      "options": [
+        "10",
+        "11",
+        "12",
+        "13"
+      ],
+      "answer": 2
+    },
+    {
+      "question": "Solve: 15 + 6  2",
+      "options": [
+        "42",
+        "27",
+        "33",
+        "21"
+      ],
+      "answer": 1
+    },
+    {
+      "question": "What is the area of a triangle with base 10 and height 5?",
+      "options": [
+        "25",
+        "50",
+        "30",
+        "15"
+      ],
+      "answer": 0
+    },
+    {
+      "question": "What is 7 factorial (7!)?",
+      "options": [
+        "720",
+        "5040",
+        "840",
+        "40320"
+      ],
+      "answer": 1
+    },
+    {
+      "question": "What is the value of 2^5?",
+      "options": [
+        "10",
+        "25",
+        "32",
+        "64"
+      ],
+      "answer": 2
+    },
+    {
+      "question": "If a = 3 and b = 4, what is the value of a\u00b2 + b\u00b2?",
+      "options": [
+        "12",
+        "25",
+        "7",
+        "24"
+      ],
+      "answer": 1
+    },
+    {
+      "question": "Which is a prime number?",
+      "options": [
+        "4",
+        "6",
+        "9",
+        "11"
+      ],
+      "answer": 3
+    },
+    {
+      "question": "How many degrees are in a right angle?",
+      "options": [
+        "45",
+        "60",
+        "90",
+        "180"
+      ],
+      "answer": 2
+    },
+    {
+      "question": "What is the next number in the sequence: 2, 4, 8, 16, ...?",
+      "options": [
+        "20",
+        "24",
+        "32",
+        "64"
+      ],
+      "answer": 2
+    }
+  ],
+  "Programming": [
+    {
+      "question": "Which language is primarily used for web development?",
+      "options": [
+        "Python",
+        "JavaScript",
+        "C++",
+        "Java"
+      ],
+      "answer": 1
+    },
+    {
+      "question": "What does HTML stand for?",
+      "options": [
+        "Hyper Trainer Marking Language",
+        "Hyper Text Markup Language",
+        "Hyper Text Markdown Language",
+        "High Text Markup Language"
+      ],
+      "answer": 1
+    },
+    {
+      "question": "Which of the following is a backend language?",
+      "options": [
+        "HTML",
+        "CSS",
+        "Java",
+        "Bootstrap"
+      ],
+      "answer": 2
+    },
+    {
+      "question": "What symbol is used for single-line comments in JavaScript?",
+      "options": [
+        "<!--",
+        "//",
+        "#",
+        "/*"
+      ],
+      "answer": 1
+    },
+    {
+      "question": "Which data structure uses LIFO (Last In, First Out)?",
+      "options": [
+        "Queue",
+        "Array",
+        "Stack",
+        "Tree"
+      ],
+      "answer": 2
+    },
+    {
+      "question": "Which of the following is not a programming language?",
+      "options": [
+        "Ruby",
+        "Python",
+        "Cobra",
+        "Anaconda"
+      ],
+      "answer": 3
+    },
+    {
+      "question": "What does CSS stand for?",
+      "options": [
+        "Cascading Style Sheet",
+        "Computer Style System",
+        "Creative Style Sheet",
+        "Colorful Style Sheet"
+      ],
+      "answer": 0
+    },
+    {
+      "question": "Which keyword is used to declare a constant in JavaScript?",
+      "options": [
+        "let",
+        "var",
+        "const",
+        "static"
+      ],
+      "answer": 2
+    },
+    {
+      "question": "In OOP, what does 'inheritance' mean?",
+      "options": [
+        "Copying code",
+        "Accessing private members",
+        "Using features from another class",
+        "Running multiple methods"
+      ],
+      "answer": 2
+    },
+    {
+      "question": "Which of these is a loop structure in programming?",
+      "options": [
+        "if",
+        "else",
+        "for",
+        "switch"
+      ],
+      "answer": 2
+    }
+  ]
+}

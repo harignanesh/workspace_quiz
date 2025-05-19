@@ -12,6 +12,12 @@ const AdminInsertQuestion = () => {
   const [message, setMessage] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [allQuestions, setAllQuestions] = useState([]);
+  const [theme, setTheme] = useState(() => localStorage.getItem('theme') || 'light');
+
+  useEffect(() => {
+    document.body.setAttribute('data-theme', theme);
+    localStorage.setItem('theme', theme);
+  }, [theme]);
 
   const fetchAllQuestions = async () => {
     try {
@@ -23,7 +29,6 @@ const AdminInsertQuestion = () => {
       }));
       setAllQuestions(questions);
       setShowModal(true);
-      
       if (questions.length === 0) {
         setMessage('info:No questions found in the database. Start by adding some questions!');
       }
@@ -57,7 +62,6 @@ const AdminInsertQuestion = () => {
   const handleFileUpload = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
-
     try {
       const text = await file.text();
       const data = JSON.parse(text);
@@ -84,12 +88,20 @@ const AdminInsertQuestion = () => {
     <div className="admin-insert-container">
       <div className="header-actions">
         <h2>Quiz Question Manager</h2>
-        <button className="view-btn" onClick={fetchAllQuestions}>
-          View All Questions
-        </button>
+        <div className="theme-toggle">
+          <button
+            className="theme-btn"
+            aria-label="Toggle theme"
+            onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}
+          >
+            {theme === 'light' ? '🌙 Dark' : '☀️ Light'}
+          </button>
+          <button className="view-btn" onClick={fetchAllQuestions}>
+            View All Questions
+          </button>
+        </div>
       </div>
-
-      <form onSubmit={handleSubmit} className="admin-form">
+      <form onSubmit={handleSubmit} className="admin-form modern-admin-form">
         <div>
           <label>Question:</label>
           <textarea
@@ -99,7 +111,6 @@ const AdminInsertQuestion = () => {
             required
           />
         </div>
-
         <label>Options:</label>
         <div className="options-grid">
           {options.map((opt, idx) => (
@@ -113,7 +124,6 @@ const AdminInsertQuestion = () => {
             />
           ))}
         </div>
-
         <div>
           <label>Correct Answer (Option Number):</label>
           <input
@@ -125,7 +135,6 @@ const AdminInsertQuestion = () => {
             required
           />
         </div>
-
         <div>
           <label>Category:</label>
           <input
@@ -136,13 +145,11 @@ const AdminInsertQuestion = () => {
             required
           />
         </div>
-
-        <button type="submit" className="submit-btn">
+        <button type="submit" className="submit-btn modern-submit-btn">
           Add Question
         </button>
       </form>
-
-      <div className="file-upload-section">
+      <div className="file-upload-section modern-upload-section">
         <label>Bulk Upload Questions</label>
         <p>Upload a JSON file containing an array of questions</p>
         <input
@@ -151,8 +158,6 @@ const AdminInsertQuestion = () => {
           onChange={handleFileUpload}
         />
       </div>
-
-      {/* Questions Modal */}
       {showModal && (
         <div className="modal-overlay" onClick={() => setShowModal(false)}>
           <div className="modal-content" onClick={e => e.stopPropagation()}>
@@ -161,18 +166,18 @@ const AdminInsertQuestion = () => {
               <button className="close-btn" onClick={() => setShowModal(false)}>&times;</button>
             </div>
             <div className="questions-list">
-              {allQuestions.length > 0 ? (
+              {Array.isArray(allQuestions) && allQuestions.length > 0 ? (
                 allQuestions.map((q, index) => (
-                  <div key={q.id} className="question-item">
+                  <div key={q.id || index} className="question-item">
                     <h4>Question {index + 1}</h4>
                     <p><strong>Category:</strong> {q.category}</p>
                     <p><strong>Q:</strong> {q.question}</p>
                     <div className="options-list">
-                      {q.options.map((opt, idx) => (
+                      {Array.isArray(q.options) ? q.options.map((opt, idx) => (
                         <p key={idx} className={idx === q.answer ? 'correct-answer' : ''}>
                           {idx === q.answer ? '✓ ' : ''}{opt}
                         </p>
-                      ))}
+                      )) : <span>No options</span>}
                     </div>
                   </div>
                 ))
@@ -190,7 +195,6 @@ const AdminInsertQuestion = () => {
           </div>
         </div>
       )}
-      
       {message && (
         <p className={`message ${
           message.startsWith('success:') ? 'success' : 

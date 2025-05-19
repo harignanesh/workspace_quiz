@@ -1,8 +1,8 @@
 .quiz-container {
-  max-width: 600px;
+  max-width: 700px;
   margin: 2rem auto;
-  padding: 2rem 1.5rem;
-  background: linear-gradient(135deg, #f7f7fb 0%, #e3e6ff 100%);
+  padding: 2.5rem 2rem;
+  background: #fff;
   border-radius: 20px;
   box-shadow: 0 10px 30px rgba(80, 80, 160, 0.08);
   min-height: 500px;
@@ -47,7 +47,6 @@
   background: #fff;
   border-radius: 12px;
   padding: 1.2rem 1rem 1rem 1rem;
-  box-shadow: 0 2px 8px rgba(80, 80, 160, 0.06);
   margin-bottom: 0.5rem;
 }
 
@@ -57,29 +56,31 @@
   margin-bottom: 0.5rem;
 }
 
-.question-text {
-  font-size: 1.25rem;
-  font-weight: 600;
-  color: #2c3e50;
+.question-text.modern-question-font {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #222;
+  font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+  margin-bottom: 1.5rem;
 }
 
-.options-container {
+.options-container.modern-options-scroll {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
-  max-height: 260px;
+  gap: 1.2rem;
+  max-height: 320px;
   overflow-y: auto;
   margin-bottom: 1rem;
 }
 
-.option-button {
+.option-button.modern-option-btn {
   display: flex;
   align-items: center;
   gap: 1.2rem;
-  background: #fff;
+  background: #f7f7f7;
   border: 2px solid #e0e6ed;
-  border-radius: 12px;
-  padding: 1rem 1.2rem;
+  border-radius: 8px;
+  padding: 1.1rem 1.5rem;
   font-size: 1.1rem;
   font-weight: 500;
   color: #2c3e50;
@@ -87,26 +88,16 @@
   transition: all 0.2s;
   box-shadow: 0 2px 8px rgba(80, 80, 160, 0.04);
   text-align: left;
+  width: 100%;
+  letter-spacing: 0.01em;
 }
 
-.option-button.selected {
+.option-button.modern-option-btn.selected {
   border-color: #6c47ff;
   background: #f3f0ff;
 }
 
-.option-button.correct {
-  border-color: #4cd964;
-  background: #e3ffe3;
-  color: #28a745;
-}
-
-.option-button.wrong {
-  border-color: #ff3b30;
-  background: #fff0f0;
-  color: #ff3b30;
-}
-
-.option-button:disabled {
+.option-button.modern-option-btn:disabled {
   opacity: 0.7;
   cursor: not-allowed;
 }
@@ -114,13 +105,44 @@
 .option-label {
   font-weight: 700;
   font-size: 1.1rem;
-  color: #6c47ff;
-  min-width: 28px;
+  color: #fff;
+  background: #c7a2b5;
+  border-radius: 4px;
+  min-width: 32px;
   display: inline-block;
+  text-align: center;
+  padding: 0.4em 0.8em;
+  margin-right: 0.7em;
+  letter-spacing: 0.05em;
 }
 
 .option-text {
   flex: 1;
+  color: #222;
+}
+
+.quiz-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.endquiz-btn {
+  background: #e0e0e0;
+  color: #6c47ff;
+  border: none;
+  border-radius: 8px;
+  padding: 0.8rem 1.5rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+
+.endquiz-btn:hover {
+  background: #6c47ff;
+  color: #fff;
 }
 
 .next-button {
@@ -132,9 +154,6 @@
   font-size: 1.1rem;
   font-weight: 600;
   cursor: pointer;
-  margin: 0 auto;
-  display: block;
-  margin-top: 1rem;
   transition: background 0.2s, transform 0.2s;
 }
 
@@ -143,47 +162,25 @@
   transform: translateY(-2px);
 }
 
-.result-card {
-  background: #fff;
-  border-radius: 16px;
-  padding: 2.5rem 1.5rem;
-  box-shadow: 0 4px 24px rgba(80, 80, 160, 0.10);
+.thankyou-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 350px;
   text-align: center;
 }
 
-.score-display {
-  margin: 1.5rem 0;
-}
-
-.score-circle {
-  display: inline-flex;
-  align-items: baseline;
-  justify-content: center;
-  background: linear-gradient(135deg, #6c47ff 0%, #8253ff 100%);
-  color: #fff;
-  border-radius: 50%;
-  width: 90px;
-  height: 90px;
+.thankyou-page h2 {
   font-size: 2.5rem;
-  font-weight: 700;
-  margin-bottom: 0.5rem;
-  box-shadow: 0 2px 12px rgba(108, 71, 255, 0.12);
-}
-
-.score-number {
-  font-size: 2.5rem;
-  margin-right: 0.2em;
-}
-
-.total-questions {
-  font-size: 1.2rem;
-  opacity: 0.8;
-}
-
-.score-text {
-  font-size: 1.2rem;
   color: #6c47ff;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.thankyou-page p {
+  font-size: 1.2rem;
+  color: #333;
+  margin-bottom: 2rem;
 }
 
 .restart-btn {
@@ -216,7 +213,10 @@
     padding: 1rem 0.5rem;
     min-height: 400px;
   }
-  .result-card {
-    padding: 1.5rem 0.5rem;
+  .question-text.modern-question-font {
+    font-size: 1.2rem;
+  }
+  .thankyou-page h2 {
+    font-size: 2rem;
   }
 }
