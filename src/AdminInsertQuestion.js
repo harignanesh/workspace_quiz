@@ -137,13 +137,22 @@ const AdminInsertQuestion = () => {
         </div>
         <div>
           <label>Category:</label>
-          <input
-            type="text"
+          <select
+            className="category-dropdown"
             value={category}
-            placeholder="e.g., Science, History, Geography..."
             onChange={(e) => setCategory(e.target.value)}
             required
-          />
+          >
+            <option value="" disabled>
+              Select a category
+            </option>
+            <option value="Maths">Maths</option>
+            <option value="Programming">Programming</option>
+            <option value="Science">Science</option>
+            <option value="History">History</option>
+            <option value="Geography">Geography</option>
+            <option value="General">General</option>
+          </select>
         </div>
         <button type="submit" className="submit-btn modern-submit-btn">
           Add Question
