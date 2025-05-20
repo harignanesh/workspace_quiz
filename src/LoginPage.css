@@ -246,20 +246,20 @@ body[data-theme="dark"] {
 
 /* Dark theme variables */
 [data-theme="dark"] {
-  --login-bg: #181a20;
-  --login-card-bg: #23263a;
-  --login-accent: #60a5fa; /* Professional blue for dark */
+  --login-bg: #23272f;
+  --login-card-bg: #2d323b;
+  --login-accent: #bfc7d5;
   --login-title: #f7f7fb;
-  --login-label: #a5b4fc;
-  --login-input-bg: #23263a;
+  --login-label: #e5e7eb;
+  --login-input-bg: #23272f;
   --login-input-border: #393c4a;
   --login-input-color: #f7f7fb;
-  --login-options-bg: #23263a;
-  --login-google-bg: #23263a;
+  --login-options-bg: #2d323b;
+  --login-google-bg: #23272f;
   --login-google-color: #f7f7fb;
-  --login-google-hover: #1e293b;
-  --login-subtext: #a5b4fc;
-  --login-illustration-bg: #1e293b;
+  --login-google-hover: #393c4a;
+  --login-subtext: #bfc7d5;
+  --login-illustration-bg: #23272f;
 }
 
 
