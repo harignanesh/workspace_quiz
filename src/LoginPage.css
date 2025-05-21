@@ -58,7 +58,8 @@ body[data-theme="dark"] {
 }
 
 .login-form input[type="email"],
-.login-form input[type="password"] {
+.login-form input[type="password"],
+.login-form input[type="text"] {
   padding: 0.7rem 1rem;
   border: 1.5px solid var(--login-input-border, #e0e0e0);
   border-radius: 8px;

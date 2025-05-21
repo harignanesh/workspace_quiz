@@ -4,8 +4,8 @@ import { signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from 
 import { auth } from './firebase';
 
 const LoginPage = ({ onLogin }) => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('rathikarajan2000@gmail.com');
+  const [password, setPassword] = useState('rathikarajan2000');
   const [error, setError] = useState('');
   const [theme, setTheme] = useState(() => localStorage.getItem('theme') || 'light');
 

@@ -39,23 +39,41 @@ const SignupPage = ({ onSignup }) => {
   return (
     <div className="login-root">
       <div className="login-left">
-        <div className="login-logo">QuizMaster</div>
-        <div className="login-welcome">
-          <h1>Create your account</h1>
-          <p>Sign up to get started</p>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
+          <div className="login-logo" style={{cursor: 'pointer'}} onClick={() => onSignup(null)}>
+            QuizMaster
+          </div>
+          <button
+            className="theme-btn"
+            aria-label="Toggle theme"
+            style={{ marginLeft: 'auto', marginRight: 0 }}
+            onClick={() => {
+              const newTheme = (document.body.getAttribute('data-theme') === 'light' ? 'dark' : 'light');
+              document.body.setAttribute('data-theme', newTheme);
+              localStorage.setItem('theme', newTheme);
+            }}
+          >
+            {(document.body.getAttribute('data-theme') || localStorage.getItem('theme') || 'light') === 'light' ? '🌙' : '☀️'}
+          </button>
         </div>
-        <form className="login-form" onSubmit={handleSubmit}>
+        <div className="login-welcome">
+          <h1 style={{ fontSize: '2.2rem', fontWeight: 700, marginBottom: '0.5rem', color: 'var(--login-title, #222)' }}>Create your account</h1>
+          <p style={{ color: 'var(--login-subtext, #888)', marginBottom: '2rem' }}>Sign up to get started</p>
+        </div>
+        <form className="login-form" style={{ maxWidth: 350, width: '100%', display: 'flex', flexDirection: 'column', gap: '1rem' }} onSubmit={handleSubmit}>
           <label>Name</label>
           <input
             type="text"
+            className=""
             placeholder="Enter your name"
             value={name}
             onChange={(e) => setName(e.target.value)}
             autoComplete="name"
-          />
+            style={{}} />
           <label>Email address</label>
           <input
             type="email"
+            className=""
             placeholder="Enter your email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
@@ -81,7 +99,15 @@ const SignupPage = ({ onSignup }) => {
         </div>
       </div>
       <div className="login-right">
-        <img src="https://assets-global.website-files.com/5e9aa66fd3886c1ecf5b5c2b/63e3b2e2b1c1b2b1b1b1b1b1_illustration.svg" alt="Welcome" className="login-illustration" />
+        <div className="floating-quiz-bg">
+          <img src="https://img.icons8.com/color/48/000000/question-mark.png" className="floating-quiz-icon icon1" alt="Colorful question mark icon floating in a playful quiz themed background" />
+          <img src="https://img.icons8.com/color/48/000000/light-on--v2.png" className="floating-quiz-icon icon2" alt="Yellow lightbulb icon representing ideas and inspiration floating in a cheerful quiz themed background" />
+          <img src="https://img.icons8.com/color/48/000000/pencil--v2.png" className="floating-quiz-icon icon3" alt="Pencil icon symbolizing writing and answers floating in a lively quiz themed background" />
+          <img src="https://img.icons8.com/color/48/000000/open-book--v2.png" className="floating-quiz-icon icon4" alt="Open book icon representing knowledge and learning floating in a bright quiz themed background" />
+          <img src="https://img.icons8.com/color/48/000000/sun--v2.png" className="floating-quiz-icon icon5" alt="Sun icon radiating positivity and energy floating in a vibrant quiz themed background" />
+          <img src="https://img.icons8.com/color/48/000000/idea.png" className="floating-quiz-icon icon6" alt="Idea" />
+        </div>
+        <img src="Mind-maps.jpg" alt="Welcome" className="login-illustration" />
       </div>
     </div>
   );

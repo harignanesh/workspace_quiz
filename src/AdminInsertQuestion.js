@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { insertQuestion } from './insertQuestion';
-import { collection, getDocs } from 'firebase/firestore';
+import { collection, getDocs, deleteDoc, doc } from 'firebase/firestore';
 import { db } from './firebase';
 import './AdminInsertQuestion.css';
 
@@ -60,6 +60,15 @@ const AdminInsertQuestion = () => {
     }
   };
 
+  const validateQuestion = (q, idx) => {
+    if (!q || typeof q !== 'object') return `Row ${idx + 1}: Not an object`;
+    if (!q.question || typeof q.question !== 'string' || !q.question.trim()) return `Row ${idx + 1}: Missing or invalid 'question'`;
+    if (!Array.isArray(q.options) || q.options.length !== 4) return `Row ${idx + 1}: 'options' must be an array of 4 items`;
+    if (typeof q.answer !== 'number' || q.answer < 0 || q.answer > 3) return `Row ${idx + 1}: 'answer' must be a number between 0 and 3`;
+    if (!q.category || typeof q.category !== 'string' || !q.category.trim()) return `Row ${idx + 1}: Missing or invalid 'category'`;
+    return null;
+  };
+
   const handleFileUpload = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -69,16 +78,27 @@ const AdminInsertQuestion = () => {
       const data = JSON.parse(text);
       if (Array.isArray(data)) {
         let successCount = 0;
+        let errorList = [];
         for (let i = 0; i < data.length; i++) {
+          const errMsg = validateQuestion(data[i], i);
+          if (errMsg) {
+            errorList.push(errMsg);
+            setUploadProgress(Math.round(((i + 1) / data.length) * 100));
+            continue;
+          }
           try {
             await insertQuestion(data[i]);
             successCount++;
           } catch (err) {
-            console.error('Failed to insert question:', err);
+            errorList.push(`Row ${i + 1}: Firestore error`);
           }
           setUploadProgress(Math.round(((i + 1) / data.length) * 100));
         }
-        setMessage(`success:Successfully inserted ${successCount} out of ${data.length} questions!`);
+        if (errorList.length === 0) {
+          setMessage(`success:Successfully inserted all ${successCount} questions!`);
+        } else {
+          setMessage(`error:Inserted ${successCount} of ${data.length} questions.\nFailed: ${errorList.join('; ')}`);
+        }
       } else {
         setMessage('error:Invalid file format. Expected an array of questions.');
       }
@@ -86,6 +106,21 @@ const AdminInsertQuestion = () => {
       setMessage('error:Failed to process the file.');
     }
     setTimeout(() => setUploadProgress(undefined), 1200);
+  };
+
+  // Add this function to clear all questions
+  const handleClearAllQuestions = async () => {
+    if (!window.confirm('Are you sure you want to delete ALL questions? This cannot be undone.')) return;
+    setMessage('');
+    try {
+      const querySnapshot = await getDocs(collection(db, 'questions'));
+      const batchDeletes = querySnapshot.docs.map((d) => deleteDoc(doc(db, 'questions', d.id)));
+      await Promise.all(batchDeletes);
+      setMessage('success:All questions deleted!');
+      setAllQuestions([]);
+    } catch (err) {
+      setMessage('error:Failed to delete all questions.');
+    }
   };
 
   return (
@@ -102,6 +137,9 @@ const AdminInsertQuestion = () => {
           </button>
           <button className="view-btn" onClick={fetchAllQuestions}>
             View All Questions
+          </button>
+          <button className="clear-btn" onClick={handleClearAllQuestions}>
+            Clear All Questions
           </button>
         </div>
       </div>
