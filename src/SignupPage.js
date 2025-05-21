@@ -16,7 +16,7 @@ const SignupPage = ({ onSignup }) => {
       setError('Please fill in all fields.');
       return;
     }
-    setError('');
+    setError(''); 
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       await updateProfile(userCredential.user, { displayName: name });
