@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { HashRouter as Router } from 'react-router-dom';
 import logo from './logo.svg';
 import './App.css';
 import LoginPage from './LoginPage';
@@ -24,20 +25,22 @@ function App() {
   };
 
   return (
-    <div className="App">
-      {isAdmin ? (
-        <AdminInsertQuestion />
-      ) : !user ? (
-        showSignup ? (
-          <SignupPage onSignup={handleSignup} />
+    <Router>
+      <div className="App">
+        {isAdmin ? (
+          <AdminInsertQuestion />
+        ) : !user ? (
+          showSignup ? (
+            <SignupPage onSignup={handleSignup} />
+          ) : (
+            <LoginPage onLogin={handleLogin} />
+          )
         ) : (
-          <LoginPage onLogin={handleLogin} />
-        )
-      ) : (
-        <QuizPage />
-      )}
-      {/* The sign up link is now handled inside LoginPage */}
-    </div>
+          <QuizPage />
+        )}
+        {/* The sign up link is now handled inside LoginPage */}
+      </div>
+    </Router>
   );
 }
 

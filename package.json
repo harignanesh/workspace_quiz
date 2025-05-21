@@ -2,7 +2,7 @@
   "name": "workspace_quiz",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://harignanesh.github.io/workspace_quiz/",
+  "homepage": "https://workspace_quiz/",
   "dependencies": {
     "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "^6.6.3",
