@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import './LoginPage.css';
 import { createUserWithEmailAndPassword, updateProfile, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import { auth } from './firebase';
+import quiz from './../src/Mind-maps.jpg'; // Import the quiz image here
 
 const SignupPage = ({ onSignup }) => {
   const [name, setName] = useState('');
@@ -88,10 +89,10 @@ const SignupPage = ({ onSignup }) => {
             autoComplete="new-password"
           />
           <button className="login-btn" type="submit">Sign up</button>
-          <button className="google-btn" type="button" onClick={handleGoogleSignUp}>
+          {/* <button className="google-btn" type="button" onClick={handleGoogleSignUp}>
             <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" className="google-icon" />
             Sign up with Google
-          </button>
+          </button> */}
           {error && <div className="error">{error}</div>}
         </form>
         <div className="login-signup">
@@ -107,7 +108,7 @@ const SignupPage = ({ onSignup }) => {
           <img src="https://img.icons8.com/color/48/000000/sun--v2.png" className="floating-quiz-icon icon5" alt="Sun icon radiating positivity and energy floating in a vibrant quiz themed background" />
           <img src="https://img.icons8.com/color/48/000000/idea.png" className="floating-quiz-icon icon6" alt="Idea" />
         </div>
-        <img src="Mind-maps.jpg" alt="Welcome" className="login-illustration" />
+        <img src={quiz} alt="Quiz illustration for signup page" className="signup-illustration" />
       </div>
     </div>
   );

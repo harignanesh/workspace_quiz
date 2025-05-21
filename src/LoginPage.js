@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import './LoginPage.css';
-import { signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
+import mind from './../src/Mind-maps.jpg';
+import logo from './logo.svg';
+import { signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, sendPasswordResetEmail } from 'firebase/auth';
 import { auth } from './firebase';
 
 const LoginPage = ({ onLogin }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [resetMsg, setResetMsg] = useState('');
   const [theme, setTheme] = useState(() => localStorage.getItem('theme') || 'light');
 
   useEffect(() => {
@@ -38,6 +41,23 @@ const LoginPage = ({ onLogin }) => {
     } catch (err) {
       setError('Google sign-in failed.');
     }
+  };
+
+  const handleForgotPassword = async (e) => {
+    e.preventDefault();
+    const emailToReset = email || window.prompt('Enter your email to reset password:');
+    if (!emailToReset) {
+      setResetMsg('Please enter your email address.');
+      setTimeout(() => setResetMsg(''), 2500);
+      return;
+    }
+    try {
+      await sendPasswordResetEmail(auth, emailToReset);
+      setResetMsg('Password reset email sent! Check your inbox.');
+    } catch (err) {
+      setResetMsg('Failed to send reset email. Please check your email address.');
+    }
+    setTimeout(() => setResetMsg(''), 3500);
   };
 
 return (
@@ -82,14 +102,15 @@ return (
                     <label className="remember-me">
                         <input type="checkbox" /> Remember for 30 days
                     </label>
-                    <a href="#" className="forgot-password">Forgot password?</a>
+                    <a href="#" className="forgot-password" onClick={handleForgotPassword}>Forgot password?</a>
                 </div>
                 <button className="login-btn" type="submit">Sign in</button>
-                <button className="google-btn" type="button" onClick={handleGoogleSignIn}>
+                {/* <button className="google-btn" type="button" onClick={handleGoogleSignIn}>
                     <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google logo" className="google-icon" />
                     Sign in with Google
-                </button>
+                </button> */}
                 {error && <div className="error">{error}</div>}
+                {resetMsg && <div className="error" style={{background:'#e0e7ff',color:'#2563eb',fontWeight:600,marginTop:8}}>{resetMsg}</div>}
             </form>
             <div className="login-signup">
                 Don't have an account? <a href="#" onClick={(e) => { e.preventDefault(); if (typeof window.setShowSignup === 'function') window.setShowSignup(true); }}>Sign up</a>
@@ -104,7 +125,7 @@ return (
                 <img src="https://img.icons8.com/color/48/000000/sun--v2.png" className="floating-quiz-icon icon5" alt="Sun icon radiating positivity and energy floating in a vibrant quiz themed background" />
           <img src="https://img.icons8.com/color/48/000000/idea.png" className="floating-quiz-icon icon6" alt="Idea" />
         </div>
-        <img src="Mind-maps.jpg" alt="Welcome" className="login-illustration" />
+        <img src={mind} alt="Mind maps illustration for quiz login" className="login-illustration" />
       </div>
   
     </div>
