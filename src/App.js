@@ -17,7 +17,7 @@ function App() {
 
   const handleLogin = (email) => {
     setUser({ email });
-    if (email === 'harignanesh18@gmail.com') setIsAdmin(true); // Example admin check
+    if (email === '') setIsAdmin(true); // Example admin check
   };
   const handleSignup = (userObj) => {
     if (userObj) setUser(userObj);
@@ -36,7 +36,7 @@ function App() {
             <LoginPage onLogin={handleLogin} />
           )
         ) : (
-          <QuizPage />
+          <QuizPage user={user} />
         )}
         {/* The sign up link is now handled inside LoginPage */}
       </div>

@@ -20,9 +20,9 @@ export async function insertQuestion({ question, options, answer, category }) {
 }
 
 //Example call (uncomment to use in a script or test):
-insertQuestion({
-  question: 'What is the capital of France?',
-  options: ['Berlin', 'London', 'Paris', 'Madrid'],
-  answer: 2,
-  category: 'geography'
-});
+// insertQuestion({
+//   question: 'What is the capital of France?',
+//   options: ['Berlin', 'London', 'Paris', 'Madrid'],
+//   answer: 2,
+//   category: 'geography'
+// });

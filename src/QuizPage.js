@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { collection, getDocs, query, where } from 'firebase/firestore';
+import { collection, getDocs, query, where, setDoc, doc } from 'firebase/firestore';
 import { db } from './firebase';
 import './QuizPage.css';
 
-const QuizPage = () => {
+const QuizPage = ({ user }) => {
   const [questions, setQuestions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showThankYou, setShowThankYou] = useState(false);
@@ -12,11 +12,14 @@ const QuizPage = () => {
   const [timerStarted, setTimerStarted] = useState(false);
   const [timeLeft, setTimeLeft] = useState(60 * 60); // 60 minutes in seconds
   const [answers, setAnswers] = useState({}); // { [index]: selectedOption }
+  const [categoryAnswers, setCategoryAnswers] = useState({}); // { category: { [index]: selectedOption } }
   const [allQuestions, setAllQuestions] = useState([]); // all questions fetched for category
+  const [allCategoryQuestions, setAllCategoryQuestions] = useState({}); // { category: questions[] }
   const [page, setPage] = useState(0);
   const QUESTIONS_PER_PAGE = 10;
   const [toast, setToast] = useState('');
   const [score, setScore] = useState(null);
+  const [categoryScores, setCategoryScores] = useState({}); // { category: score }
 
   useEffect(() => {
     // Fetch available categories
@@ -58,6 +61,27 @@ const QuizPage = () => {
     fetchQuestions();
   }, [selectedCategory]);
 
+  // Fetch all questions for all categories
+  useEffect(() => {
+    const fetchAllQuestions = async () => {
+      try {
+        const querySnapshot = await getDocs(collection(db, 'questions'));
+        const questionsByCategory = {};
+        querySnapshot.docs.forEach(doc => {
+          const data = doc.data();
+          if (!questionsByCategory[data.category]) {
+            questionsByCategory[data.category] = [];
+          }
+          questionsByCategory[data.category].push(data);
+        });
+        setAllCategoryQuestions(questionsByCategory);
+      } catch (err) {
+        console.error('Error fetching all questions:', err);
+      }
+    };
+    fetchAllQuestions();
+  }, []);
+
   // Start timer on first mount (first login)
   useEffect(() => {
     if (!timerStarted) {
@@ -93,20 +117,79 @@ const QuizPage = () => {
   const totalPages = Math.ceil(allQuestions.length / QUESTIONS_PER_PAGE);
 
   const handleOptionClick = (qIdx, optIdx) => {
-    setAnswers({ ...answers, [page * QUESTIONS_PER_PAGE + qIdx]: optIdx });
+    setCategoryAnswers(prev => ({
+      ...prev,
+      [selectedCategory]: {
+        ...prev[selectedCategory],
+        [page * QUESTIONS_PER_PAGE + qIdx]: optIdx,
+      },
+    }));
   };
 
-  const handleSubmitQuiz = () => {
-    if (Object.keys(answers).length < allQuestions.length) {
-      alert('Not all Question answered');
-      return;
+  const saveQuizData = (category, answers, score) => {
+    const data = {
+      category,
+      answers,
+      score,
+    };
+
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'quiz_results.json';
+    a.click();
+    URL.revokeObjectURL(url);
+    console.log('Quiz data saved successfully as a downloadable JSON file.');
+  };
+
+  const saveQuizDataToFirebase = async (category, answers, score) => {
+    const data = {
+      category,
+      answers,
+      score,
+      timestamp: new Date().toISOString(),
+    };
+
+    try {
+      await setDoc(doc(db, 'quizResults', `${user.email}_${category}`), data);
+      console.log('Quiz data saved to Firebase successfully.');
+    } catch (err) {
+      console.error('Error saving quiz data to Firebase:', err);
     }
-    // Calculate score
-    let correct = 0;
-    allQuestions.forEach((q, idx) => {
-      if (answers[idx] === q.answer) correct++;
-    });
-    setScore(correct);
+  };
+
+  const handleSubmitQuiz = async () => {
+    const updatedScores = { ...categoryScores };
+    let totalScore = 0;
+
+    // Iterate through all categories to calculate scores
+    for (const category of categories) {
+      const categoryQuestions = allCategoryQuestions[category] || [];
+      const categoryAnswersForCategory = categoryAnswers[category] || {};
+
+      let correct = 0;
+      categoryQuestions.forEach((q, idx) => {
+        if (categoryAnswersForCategory[idx] === q.answer) correct++;
+      });
+
+      updatedScores[category] = correct;
+      totalScore += correct;
+    }
+
+    setCategoryScores(updatedScores);
+
+    // Save scores to Firebase
+    try {
+      await setDoc(doc(db, 'quizScores', user.email), {
+        scores: updatedScores,
+        totalScore,
+      });
+    } catch (err) {
+      console.error('Error saving scores:', err);
+    }
+
+    setScore(totalScore);
     setShowThankYou(true);
   };
 
@@ -128,6 +211,12 @@ const QuizPage = () => {
     }
   }, [showThankYou, allQuestions, answers, score]);
 
+  const allQuestionsAnswered = Object.keys(allCategoryQuestions).every(category => {
+    const categoryQuestions = allCategoryQuestions[category] || [];
+    return categoryQuestions.length > 0 &&
+      categoryQuestions.every((_, idx) => categoryAnswers[category]?.[idx] !== undefined);
+  });
+
   if (loading) {
     return (
       <div className="quiz-container">
@@ -142,11 +231,29 @@ const QuizPage = () => {
         <h2>Thank You!</h2>
         <p>Your quiz is completed.</p>
         {score !== null && (
-          <div style={{fontSize: '1.3rem', fontWeight: 700, color: '#6c47ff', margin: '1.5rem 0'}}>
-            Your Score: {score} / {allQuestions.length}
+          <div style={{ fontSize: '1.3rem', fontWeight: 700, color: '#6c47ff', margin: '1.5rem 0' }}>
+            Overall Score: {score}
           </div>
         )}
-        <button className="restart-btn" onClick={() => window.location.reload()}>Take Another Quiz</button>
+        <table style={{ width: '100%', borderCollapse: 'collapse', marginTop: '20px' }}>
+          <thead>
+            <tr style={{ backgroundColor: '#f4f4f4', textAlign: 'left' }}>
+              <th style={{ padding: '10px', border: '1px solid #ddd' }}>Category</th>
+              <th style={{ padding: '10px', border: '1px solid #ddd' }}>Score</th>
+            </tr>
+          </thead>
+          <tbody>
+            {Object.entries(categoryScores).map(([category, score]) => (
+              <tr key={category}>
+                <td style={{ padding: '10px', border: '1px solid #ddd' }}>{category}</td>
+                <td style={{ padding: '10px', border: '1px solid #ddd' }}>{score}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        <button className="restart-btn" onClick={() => window.location.reload()} style={{ marginTop: '20px' }}>
+          Take Another Quiz
+        </button>
       </div>
     );
   }
@@ -188,6 +295,24 @@ const QuizPage = () => {
           </select>
         </div>
         <div className="timer">Time Left: {formatTime(timeLeft)}</div>
+        <div className="question-status">
+          {`Answered: ${Object.keys(categoryAnswers[selectedCategory] || {}).length} / ${allQuestions.length}`}
+        </div>
+        <button
+          className="submit-button"
+          type="submit"
+          style={{
+            backgroundColor: allQuestionsAnswered ? 'green' : 'red',
+            color: 'white',
+            position: 'absolute',
+            top: '10px',
+            right: '10px',
+          }}
+          disabled={!allQuestionsAnswered}
+          onClick={handleSubmitQuiz}
+        >
+          Submit Quiz
+        </button>
       </div>
 
       <form onSubmit={e => { e.preventDefault(); handleSubmitQuiz(); }}>
@@ -203,7 +328,7 @@ const QuizPage = () => {
                   <button
                     type="button"
                     key={optIdx}
-                    className={`option-button modern-option-btn ${answers[page * QUESTIONS_PER_PAGE + qIdx] === optIdx ? 'selected' : ''}`}
+                    className={`option-button modern-option-btn ${categoryAnswers[selectedCategory]?.[page * QUESTIONS_PER_PAGE + qIdx] === optIdx ? 'selected' : ''}`}
                     onClick={() => handleOptionClick(qIdx, optIdx)}
                   >
                     <span className="option-label">{String.fromCharCode(65 + optIdx)}</span>
@@ -226,11 +351,6 @@ const QuizPage = () => {
                 Next Page
               </button>
             </>
-          )}
-          {page === totalPages - 1 && (
-            <button className="next-button" type="submit" disabled={Object.keys(answers).length !== allQuestions.length}>
-              Submit Quiz
-            </button>
           )}
         </div>
       </form>
