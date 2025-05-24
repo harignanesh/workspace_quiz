@@ -17,7 +17,7 @@ function App() {
 
   const handleLogin = (email) => {
     setUser({ email });
-    if (email === '') setIsAdmin(true); // Example admin check
+    if (email === 'harignanesh18@gmail.com' || email ==='radhakrishnan132005@gmail.com' ) setIsAdmin(true); // Example admin check
   };
   const handleSignup = (userObj) => {
     if (userObj) setUser(userObj);
